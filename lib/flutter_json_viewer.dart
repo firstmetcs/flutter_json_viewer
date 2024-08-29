@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 class JsonViewer extends StatefulWidget {
   final dynamic jsonObj;
+
   JsonViewer(this.jsonObj);
+
   @override
   _JsonViewerState createState() => _JsonViewerState();
 }
@@ -58,7 +60,7 @@ class JsonObjectViewerState extends State<JsonObjectViewer> {
       bool ex = isExtensible(entry.value);
       bool ink = isInkWell(entry.value);
       list.add(Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           ex
               ? ((openFlag[entry.key] ?? false)
@@ -70,26 +72,34 @@ class JsonObjectViewerState extends State<JsonObjectViewer> {
                   color: Color.fromARGB(0, 0, 0, 0),
                   size: 14,
                 ),
-          (ex && ink)
-              ? InkWell(
-                  child: Text(entry.key,
-                      style: TextStyle(color: Colors.purple[900])),
-                  onTap: () {
-                    setState(() {
-                      openFlag[entry.key] = !(openFlag[entry.key] ?? false);
-                    });
-                  })
-              : Text(entry.key,
-                  style: TextStyle(
-                      color: entry.value == null
-                          ? Colors.grey
-                          : Colors.purple[900])),
-          Text(
-            ':',
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(width: 3),
-          getValueWidget(entry)
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                (ex && ink)
+                    ? InkWell(
+                        child: Text(entry.key,
+                            style: TextStyle(color: Colors.purple[900])),
+                        onTap: () {
+                          setState(() {
+                            openFlag[entry.key] =
+                                !(openFlag[entry.key] ?? false);
+                          });
+                        })
+                    : Text(entry.key,
+                        style: TextStyle(
+                            color: entry.value == null
+                                ? Colors.grey
+                                : Colors.purple[900])),
+                Text(
+                  ':',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                const SizedBox(width: 3),
+                getValueWidget(entry),
+              ],
+            ),
+          )
         ],
       ));
       list.add(const SizedBox(height: 4));
@@ -262,7 +272,7 @@ class _JsonArrayViewerState extends State<JsonArrayViewer> {
       bool ex = JsonObjectViewerState.isExtensible(content);
       bool ink = JsonObjectViewerState.isInkWell(content);
       list.add(Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           ex
               ? ((openFlag[i])
@@ -274,18 +284,26 @@ class _JsonArrayViewerState extends State<JsonArrayViewer> {
                   color: Color.fromARGB(0, 0, 0, 0),
                   size: 14,
                 ),
-          (ex && ink)
-              ? getInkWell(i)
-              : Text('[$i]',
-                  style: TextStyle(
-                      color:
-                          content == null ? Colors.grey : Colors.purple[900])),
-          Text(
-            ':',
-            style: TextStyle(color: Colors.grey),
-          ),
-          const SizedBox(width: 3),
-          getValueWidget(content, i)
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                (ex && ink)
+                    ? getInkWell(i)
+                    : Text('[$i]',
+                        style: TextStyle(
+                            color: content == null
+                                ? Colors.grey
+                                : Colors.purple[900])),
+                Text(
+                  ':',
+                  style: TextStyle(color: Colors.grey),
+                ),
+                const SizedBox(width: 3),
+                getValueWidget(content, i),
+              ],
+            ),
+          )
         ],
       ));
       list.add(const SizedBox(height: 4));
